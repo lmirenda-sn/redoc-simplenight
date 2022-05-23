@@ -330,24 +330,24 @@ export class OpenAPIParser {
       }
 
       if (oneOf !== undefined) {
-        receiver.oneOf = [...(receiver?.oneOf || []), ...oneOf];
+        receiver.oneOf = oneOf;
       }
 
       if (anyOf !== undefined) {
-        receiver.anyOf = [...(receiver?.oneOf || []), ...anyOf];
-      }
-
-      if (examples !== undefined) {
-        receiver.examples = [...(receiver.examples || []), ...examples];
+        receiver.anyOf = anyOf;
       }
 
       if (example !== undefined) {
         receiver.example = example;
       }
 
+      if (examples !== undefined) {
+        receiver.examples = examples;
+      }
+
       // merge rest of constraints
       // TODO: do more intelligent merge
-      receiver = { title, ...receiver, ...otherConstraints };
+      receiver = { ...receiver, title: receiver.title || title, ...otherConstraints };
 
       if (subSchemaRef) {
         receiver.parentRefs!.push(subSchemaRef);
