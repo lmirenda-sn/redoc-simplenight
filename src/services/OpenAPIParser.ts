@@ -274,6 +274,11 @@ export class OpenAPIParser {
         properties,
         items,
         required,
+        oneOf,
+        anyOf,
+        examples,
+        example,
+        title,
         ...otherConstraints
       } = subSchema;
 
@@ -324,9 +329,25 @@ export class OpenAPIParser {
         receiver.required = (receiver.required || []).concat(required);
       }
 
+      if (oneOf !== undefined) {
+        receiver.oneOf = [...(receiver?.oneOf || []), ...oneOf];
+      }
+
+      if (anyOf !== undefined) {
+        receiver.anyOf = [...(receiver?.oneOf || []), ...anyOf];
+      }
+
+      if (examples !== undefined) {
+        receiver.examples = [...(receiver.examples || []), ...examples];
+      }
+
+      if (example !== undefined) {
+        receiver.example = example;
+      }
+
       // merge rest of constraints
       // TODO: do more intelligent merge
-      receiver = { ...receiver, ...otherConstraints };
+      receiver = { title, ...receiver, ...otherConstraints };
 
       if (subSchemaRef) {
         receiver.parentRefs!.push(subSchemaRef);
