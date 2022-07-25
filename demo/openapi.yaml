@@ -1,1208 +1,2500 @@
-openapi: 3.0.0
-servers:
-  - url: //petstore.swagger.io/v2
-    description: Default server
-  - url: //petstore.swagger.io/sandbox
-    description: Sandbox server
+openapi: 3.0.3
+x-stoplight:
+  id: 7wz2iwhrv7f95
 info:
-  description: |
-    This is a sample server Petstore server.
-    You can find out more about Swagger at
-    [http://swagger.io](http://swagger.io) or on [irc.freenode.net, #swagger](http://swagger.io/irc/).
-    For this sample, you can use the api key `special-key` to test the authorization filters.
-
-    # Introduction
-    This API is documented in **OpenAPI format** and is based on
-    [Petstore sample](http://petstore.swagger.io/) provided by [swagger.io](http://swagger.io) team.
-    It was **extended** to illustrate features of [generator-openapi-repo](https://github.com/Rebilly/generator-openapi-repo)
-    tool and [ReDoc](https://github.com/Redocly/redoc) documentation. In addition to standard
-    OpenAPI syntax we use a few [vendor extensions](https://github.com/Redocly/redoc/blob/master/docs/redoc-vendor-extensions.md).
-
-    # OpenAPI Specification
-    This API is documented in **OpenAPI format** and is based on
-    [Petstore sample](http://petstore.swagger.io/) provided by [swagger.io](http://swagger.io) team.
-    It was **extended** to illustrate features of [generator-openapi-repo](https://github.com/Rebilly/generator-openapi-repo)
-    tool and [ReDoc](https://github.com/Redocly/redoc) documentation. In addition to standard
-    OpenAPI syntax we use a few [vendor extensions](https://github.com/Redocly/redoc/blob/master/docs/redoc-vendor-extensions.md).
-
-    # Cross-Origin Resource Sharing
-    This API features Cross-Origin Resource Sharing (CORS) implemented in compliance with  [W3C spec](https://www.w3.org/TR/cors/).
-    And that allows cross-domain communication from the browser.
-    All responses have a wildcard same-origin which makes them completely public and accessible to everyone, including any code on any site.
-
-    # Authentication
-
-    Petstore offers two forms of authentication:
-      - API Key
-      - OAuth2
-    OAuth2 - an open protocol to allow secure authorization in a simple
-    and standard method from web, mobile and desktop applications.
-
-    <SecurityDefinitions />
-
+  contact: null
+  title: Simplenight API V2
   version: 1.0.0
-  title: Swagger Petstore
-  termsOfService: 'http://swagger.io/terms/'
-  contact:
-    name: API Support
-    email: apiteam@swagger.io
-    url: https://github.com/Redocly/redoc
+  description: Simplenight API Search Hotels
   x-logo:
-    url: 'https://redocly.github.io/redoc/petstore-logo.png'
-    altText: Petstore logo
-  license:
-    name: Apache 2.0
-    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
-externalDocs:
-  description: Find out how to create Github repo for your OpenAPI spec.
-  url: 'https://github.com/Rebilly/generator-openapi-repo'
-tags:
-  - name: pet
-    description: Everything about your Pets
-  - name: store
-    description: Access to Petstore orders
-  - name: user
-    description: Operations about user
-  - name: pet_model
-    x-displayName: The Pet Model
-    description: |
-      <SchemaDefinition schemaRef="#/components/schemas/Pet" />
-  - name: store_model
-    x-displayName: The Order Model
-    description: |
-      <SchemaDefinition schemaRef="#/components/schemas/Order" exampleRef="#/components/examples/Order" showReadOnly={true} showWriteOnly={true} />
-x-tagGroups:
-  - name: General
-    tags:
-      - pet
-      - store
-  - name: User Management
-    tags:
-      - user
-  - name: Models
-    tags:
-      - pet_model
-      - store_model
+    url: 'https://bog.simplenight.com/bookings/simplenight-logo.png'
 paths:
-  /pet:
+  /v2/hotels:
+    get:
+      operationId: v2_hotels_retrieve
+      description: |
+        ## Description 
+        Retrieve a list of hotels matching the search criteria. 
+
+        The Hotel endpoint allows several methods that enable you to obtain the details of the hotels as well as list of destinations, countries and the master types that complement the hotels information (like room type descriptions, accommodation type descriptions, categories descriptions, etc.).
+
+        * The API requires **either** `dst_geolocation` or `inventory_ids` as query parameter.
+
+        * Use `dst_geolocation` and `radius` query parameters to find hotels in this location.
+
+        * Use `inventory_ids` query parameter to limit the search to the desired hotels. Multiple IDs can be sent, separated by commas.
+
+        * Use `start_date` and `end_date` to adjust your search to your stay. These parameters must be together, if used. Dates follow the [ISO 8061 notation](https://en.wikipedia.org/wiki/ISO_8601). e.g. `2022-06-20`.
+
+        * Use filters to narrow down searches. These parameters are marked as "filter" in the description.
+
+        * Use `sort` to order the results by criteria. Can be in ascending or descending order.
+
+        * Use `limit` to manage the amount of results retrieved in the response. 
+
+        * Responses will contain `rates` **only if** `start_date` and `end_date` are sent as parameters.
+      summary: Search for hotels
+      parameters:
+        - $ref: '#/components/parameters/dst_geolocation'
+        - $ref: '#/components/parameters/inventory_ids'
+        - $ref: '#/components/parameters/adults'
+        - $ref: '#/components/parameters/children'
+        - $ref: '#/components/parameters/children_ages'
+        - $ref: '#/components/parameters/currency'
+        - $ref: '#/components/parameters/end_date'
+        - $ref: '#/components/parameters/lang'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/meal_types'
+        - $ref: '#/components/parameters/radius'
+        - $ref: '#/components/parameters/rate_type'
+        - $ref: '#/components/parameters/room_codes'
+        - $ref: '#/components/parameters/rooms'
+        - $ref: '#/components/parameters/rsp_fields'
+        - $ref: '#/components/parameters/rsp_fields_set'
+        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/star_date'
+        - $ref: '#/components/parameters/unit'
+        - $ref: '#/components/parameters/filter_star_rating'
+        - $ref: '#/components/parameters/filter_max_price'
+        - $ref: '#/components/parameters/filter_min_price'
+      tags:
+        - Hotels
+      security: []
+      responses:
+        '200':
+          $ref: '#/components/responses/200-Hotel'
+        '400':
+          $ref: '#/components/responses/400-Hotel'
+  '/v2/hotels/{hotel_id}':
+    get:
+      operationId: v2_hotels_retrieve_2
+      description: |-
+        Find the hotel that matches the specified ID, formatted as `supplier_id:hotel_id`.
+
+        * In order to find hotel ids, use the [Get Hotel](openapi-2.yaml/paths/~1v2~1hotels) endpoint. Every Hotel object has an ID, under the key `id`. 
+
+        * Only **one** hotel id can be passed as path parameter per request. If multiple ids are required, consider using the [Get Hotels]() endpoint with `inventory_ids` query parameter.
+
+        * Use `start_date` and `end_date` to adjust your search to your stay. These parameters must be together, if used. Dates follow the [ISO 8061 notation](https://en.wikipedia.org/wiki/ISO_8601). e.g. `2022-06-20`.
+
+        * Use filters to narrow down searches. These parameters are marked as "filter" in the description.
+      summary: Retrieve a hotel
+      parameters:
+        - $ref: '#/components/parameters/adults'
+        - $ref: '#/components/parameters/children'
+        - $ref: '#/components/parameters/children_ages'
+        - $ref: '#/components/parameters/currency'
+        - $ref: '#/components/parameters/customer_transaction_id'
+        - $ref: '#/components/parameters/end_date'
+        - $ref: '#/components/parameters/lang'
+        - $ref: '#/components/parameters/meal_types'
+        - $ref: '#/components/parameters/rate_type'
+        - $ref: '#/components/parameters/room_codes'
+        - $ref: '#/components/parameters/rooms'
+        - $ref: '#/components/parameters/rsp_fields'
+        - $ref: '#/components/parameters/rsp_fields_set'
+        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/star_date'
+        - $ref: '#/components/parameters/unit'
+        - $ref: '#/components/parameters/filter_star_rating'
+        - $ref: '#/components/parameters/filter_max_price'
+        - $ref: '#/components/parameters/filter_min_price'
+      tags:
+        - Hotels
+      security: []
+      responses:
+        '200':
+          $ref: '#/components/responses/200-Hotel'
+        '400':
+          $ref: '#/components/responses/400-Hotel'
     parameters:
-      - name: Accept-Language
-        in: header
-        description: 'The language you prefer for messages. Supported values are en-AU, en-CA, en-GB, en-US'
-        example: en-US
-        required: false
-        schema:
-          type: string
-          default: en-AU
-      - name: cookieParam
-        in: cookie
-        description: Some cookie
-        required: true
-        schema:
-          type: integer
-          format: int64
-    post:
+      - $ref: '#/components/parameters/hotel_id'
+  /v2/carts:
+    get:
+      summary: List all carts
       tags:
-        - pet
-      summary: Add a new pet to the store
-      description: Add new pet to the store inventory.
-      operationId: addPet
+        - Carts
       responses:
-        '405':
-          description: Invalid input
-      security:
-        - petstore_auth:
-            - 'write:pets'
-            - 'read:pets'
-      x-codeSamples:
-        - lang: 'C#'
-          source: |
-            PetStore.v1.Pet pet = new PetStore.v1.Pet();
-            pet.setApiKey("your api key");
-            pet.petType = PetStore.v1.Pet.TYPE_DOG;
-            pet.name = "Rex";
-            // set other fields
-            PetStoreResponse response = pet.create();
-            if (response.statusCode == HttpStatusCode.Created)
-            {
-              // Successfully created
-            }
-            else
-            {
-              // Something wrong -- check response for errors
-              Console.WriteLine(response.getRawResponse());
-            }
-        - lang: PHP
-          source: |
-            $form = new \PetStore\Entities\Pet();
-            $form->setPetType("Dog");
-            $form->setName("Rex");
-            // set other fields
-            try {
-                $pet = $client->pets()->create($form);
-            } catch (UnprocessableEntityException $e) {
-                var_dump($e->getErrors());
-            }
+        '200':
+          $ref: '#/components/responses/200-Cart'
+      operationId: get-v2-carts
+      description: List all carts.
+      x-internal: false
+    post:
+      summary: Create Cart
+      operationId: post-v2-carts
+      responses:
+        '200':
+          $ref: '#/components/responses/200-Cart'
+      description: |-
+        Create a new empty cart.
+
+        By default, all carts are created in english `en` and currency is set to United States Dollars `USD`, and contain no cart items `items`. 
+
+        The default settings can be modified by sending the desired values in the request body. Sending one or more items in the request will add them to the newly created cart.
+
+      parameters: []
+      tags:
+        - Carts
+      x-internal: false
       requestBody:
-        $ref: '#/components/requestBodies/Pet'
+        $ref: '#/components/requestBodies/Cart'
+  '/v2/carts/{cart_id}':
+    parameters:
+      - $ref: '#/components/parameters/cart_id'
+    get:
+      summary: Retrieve a cart
+      tags:
+        - Carts
+      responses:
+        '200':
+          $ref: '#/components/responses/200-Cart'
+        '404':
+          $ref: '#/components/responses/404-Cart'
+      operationId: get-vs-carts-cart_id
+      description: |-
+        Get details for a given Cart.
+        This will return all the cart configuration information as well as the items with details.
     put:
-      tags:
-        - pet
-      summary: Update an existing pet
-      description: ''
-      operationId: updatePet
-      responses:
-        '400':
-          description: Invalid ID supplied
-        '404':
-          description: Pet not found
-        '405':
-          description: Validation exception
-      security:
-        - petstore_auth:
-            - 'write:pets'
-            - 'read:pets'
-      x-codeSamples:
-        - lang: PHP
-          source: |
-            $form = new \PetStore\Entities\Pet();
-            $form->setPetId(1);
-            $form->setPetType("Dog");
-            $form->setName("Rex");
-            // set other fields
-            try {
-                $pet = $client->pets()->update($form);
-            } catch (UnprocessableEntityException $e) {
-                var_dump($e->getErrors());
-            }
-      requestBody:
-        $ref: '#/components/requestBodies/Pet'
-  '/pet/{petId}':
-    get:
-      tags:
-        - pet
-      summary: Find pet by ID
-      description: Returns a single pet
-      operationId: getPetById
-      parameters:
-        - name: petId
-          in: path
-          description: ID of pet to return
-          required: true
-          deprecated: true
-          schema:
-            type: integer
-            format: int64
+      summary: Update a cart
+      operationId: put-v2-carts-cart_id
       responses:
         '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Pet'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/Pet'
-        '400':
-          description: Invalid ID supplied
+          $ref: '#/components/responses/200-Cart'
         '404':
-          description: Pet not found
-      security:
-        - api_key: []
-    post:
+          $ref: '#/components/responses/404-Cart'
+      description: |
+        Update cart details. 
+        Allows modification of:
+        * `lang`: Cart language
+        * `currency`: Default cart currency
+        * `items`: Cart items
+        * `customer_additional_request`: Additional request
       tags:
-        - pet
-      summary: Updates a pet in the store with form data
-      description: ''
-      operationId: updatePetWithForm
-      parameters:
-        - name: petId
-          in: path
-          description: ID of pet that needs to be updated
-          required: true
-          schema:
-            type: integer
-            format: int64
-      responses:
-        '405':
-          description: Invalid input
-      security:
-        - petstore_auth:
-            - 'write:pets'
-            - 'read:pets'
+        - Carts
       requestBody:
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                name:
-                  description: Updated name of the pet
-                  type: string
-                status:
-                  description: Updated status of the pet
-                  type: string
+        $ref: '#/components/requestBodies/Cart'
     delete:
-      tags:
-        - pet
-      summary: Deletes a pet
-      description: ''
-      operationId: deletePet
-      parameters:
-        - name: api_key
-          in: header
-          required: false
-          schema:
-            type: string
-          example: 'Bearer <TOKEN>'
-        - name: petId
-          in: path
-          description: Pet id to delete
-          required: true
-          schema:
-            type: integer
-            format: int64
+      summary: Delete a cart
+      operationId: delete-v2-carts-cart_id
       responses:
-        '400':
-          description: Invalid pet value
-      security:
-        - petstore_auth:
-            - 'write:pets'
-            - 'read:pets'
-  '/pet/{petId}/uploadImage':
+        '200':
+          $ref: '#/components/responses/200-DeleteCart'
+        '404':
+          $ref: '#/components/responses/404-Cart'
+      description: |-
+        Delete a Cart.
+
+        <!-- theme: danger -->
+        > **IMPORTANT**: This action cannot be reverted, the cart and all the item it contains will be lost in the delete process.
+      tags:
+        - Carts
+  '/v2/carts/{cart_id}/items':
+    parameters:
+      - $ref: '#/components/parameters/cart_id'
+    get:
+      summary: Retrieve cart item data
+      responses:
+        '200':
+          $ref: '#/components/responses/200-Cart'
+        '404':
+          $ref: '#/components/responses/404-Cart'
+      operationId: get-v2-carts-cart_id-items
+      description: |-
+        Get extended data of all items in the cart. 
+
+        <!-- theme: danger -->
+        > **IMPORTANT**: This action cannot be reverted and all items will be lost in the delete process. 
+        >
+        > The cart will still exist.
+      tags:
+        - Carts
     post:
-      tags:
-        - pet
-      summary: uploads an image
-      description: ''
-      operationId: uploadFile
-      parameters:
-        - name: petId
-          in: path
-          description: ID of pet to update
-          required: true
-          schema:
-            type: integer
-            format: int64
+      summary: Add items to cart
+      operationId: post-v2-carts-cart_id-items
       responses:
         '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-      security:
-        - petstore_auth:
-            - 'write:pets'
-            - 'read:pets'
-      requestBody:
-        content:
-          application/octet-stream:
-            schema:
-              type: string
-              format: binary
-  /pet/findByStatus:
-    get:
+          $ref: '#/components/responses/200-CartItem'
+        '404':
+          $ref: '#/components/responses/404-Cart'
+      description: Add one or more items to the cart
       tags:
-        - pet
-      summary: Finds Pets by status
-      description: Multiple status values can be provided with comma separated strings
-      operationId: findPetsByStatus
-      parameters:
-        - name: status
-          in: query
-          description: Status values that need to be considered for filter
-          required: true
-          style: form
-          schema:
-            type: array
-            minItems: 1
-            maxItems: 3
-            items:
-              type: string
-              enum:
-                - available
-                - pending
-                - sold
-              default: available
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Pet'
-            application/xml:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Pet'
-        '400':
-          description: Invalid status value
-      security:
-        - petstore_auth:
-            - 'write:pets'
-            - 'read:pets'
-  /pet/findByTags:
-    get:
-      tags:
-        - pet
-      summary: Finds Pets by tags
-      description: >-
-        Multiple tags can be provided with comma separated strings. Use tag1,
-        tag2, tag3 for testing.
-      operationId: findPetsByTags
-      deprecated: true
-      parameters:
-        - name: tags
-          in: query
-          description: Tags to filter by
-          required: true
-          style: form
-          schema:
-            type: array
-            items:
-              type: string
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Pet'
-            application/xml:
-              schema:
-                type: array
-                maxItems: 999
-                items:
-                  maxItems: 111
-                  $ref: '#/components/schemas/Pet'
-        '400':
-          description: Invalid tag value
-      security:
-        - petstore_auth:
-            - 'write:pets'
-            - 'read:pets'
-  /store/inventory:
-    get:
-      tags:
-        - store
-      summary: Returns pet inventories by status
-      description: Returns a map of status codes to quantities
-      operationId: getInventory
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-                minProperties: 2
-                additionalProperties:
-                  type: integer
-                  format: int32
-      security:
-        - api_key: []
-  /store/order:
-    post:
-      tags:
-        - store
-      summary: Place an order for a pet
-      description: ''
-      operationId: placeOrder
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Order'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/Order'
-        '400':
-          description: Invalid Order
-          content:
-            application/json:
-              example:
-                status: 400
-                message: 'Invalid Order'
+        - Carts
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Order'
-        description: order placed for purchasing the pet
-        required: true
-  '/store/order/{orderId}':
-    get:
-      tags:
-        - store
-      summary: Find purchase order by ID
-      description: >-
-        For valid response try integer IDs with value <= 5 or > 10. Other values
-        will generated exceptions
-      operationId: getOrderById
-      parameters:
-        - name: orderId
-          in: path
-          description: ID of pet that needs to be fetched
-          required: true
-          schema:
-            type: integer
-            format: int64
-            minimum: 1
-            maximum: 5
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Order'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/Order'
-        '400':
-          description: Invalid ID supplied
-        '404':
-          description: Order not found
+              $ref: '#/components/schemas/Item'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Item'
+        description: ''
     delete:
-      tags:
-        - store
-      summary: Delete purchase order by ID
-      description: >-
-        For valid response try integer IDs with value < 1000. Anything above
-        1000 or nonintegers will generate API errors
-      operationId: deleteOrder
-      parameters:
-        - name: orderId
-          in: path
-          description: ID of the order that needs to be deleted
-          required: true
-          schema:
-            type: string
-            minimum: 1
-      responses:
-        '400':
-          description: Invalid ID supplied
-        '404':
-          description: Order not found
-  /store/subscribe:
-    post:
-      tags:
-        - store
-      summary: Subscribe to the Store events
-      description: Add subscription for a store events
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                callbackUrl:
-                  type: string
-                  format: uri
-                  description: This URL will be called by the server when the desired event will occur
-                  example: https://myserver.com/send/callback/here
-                eventName:
-                  type: string
-                  description: Event name for the subscription
-                  enum:
-                    - orderInProgress
-                    - orderShipped
-                    - orderDelivered
-                  example: orderInProgress
-              required:
-                - callbackUrl
-                - eventName
-      responses:
-        '201':
-          description: Subscription added
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  subscriptionId:
-                    type: string
-                    example: AAA-123-BBB-456
-      callbacks:
-        orderInProgress:
-          '{$request.body#/callbackUrl}?event={$request.body#/eventName}':
-            servers:
-              - url: //callback-url.path-level/v1
-                description: Path level server 1
-              - url: //callback-url.path-level/v2
-                description: Path level server 2
-            post:
-              summary: Order in Progress (Summary)
-              description: A callback triggered every time an Order is updated status to "inProgress" (Description)
-              externalDocs:
-                description: Find out more
-                url: 'https://more-details.com/demo'
-              requestBody:
-                content:
-                  application/json:
-                    schema:
-                      type: object
-                      properties:
-                        orderId:
-                          type: string
-                          example: '123'
-                        timestamp:
-                          type: string
-                          format: date-time
-                          example: '2018-10-19T16:46:45Z'
-                        status:
-                          type: string
-                          example: 'inProgress'
-                  application/xml:
-                    schema:
-                      type: object
-                      properties:
-                        orderId:
-                          type: string
-                          example: '123'
-                    example: |
-                      <?xml version="1.0" encoding="UTF-8"?>
-                      <root>
-                        <orderId>123</orderId>
-                        <status>inProgress</status>
-                        <timestamp>2018-10-19T16:46:45Z</timestamp>
-                      </root>
-              responses:
-                '200':
-                  description: Callback successfully processed and no retries will be performed
-                  content:
-                    application/json:
-                      schema:
-                        type: object
-                        properties:
-                          someProp:
-                            type: string
-                            example: '123'
-                '299':
-                  description: Response for cancelling subscription
-                '500':
-                  description: Callback processing failed and retries will be performed
-              x-codeSamples:
-                - lang: 'C#'
-                  source: |
-                    PetStore.v1.Pet pet = new PetStore.v1.Pet();
-                    pet.setApiKey("your api key");
-                    pet.petType = PetStore.v1.Pet.TYPE_DOG;
-                    pet.name = "Rex";
-                    // set other fields
-                    PetStoreResponse response = pet.create();
-                    if (response.statusCode == HttpStatusCode.Created)
-                    {
-                      // Successfully created
-                    }
-                    else
-                    {
-                      // Something wrong -- check response for errors
-                      Console.WriteLine(response.getRawResponse());
-                    }
-                - lang: PHP
-                  source: |
-                    $form = new \PetStore\Entities\Pet();
-                    $form->setPetType("Dog");
-                    $form->setName("Rex");
-                    // set other fields
-                    try {
-                        $pet = $client->pets()->create($form);
-                    } catch (UnprocessableEntityException $e) {
-                        var_dump($e->getErrors());
-                    }
-            put:
-              description: Order in Progress (Only Description)
-              servers:
-                - url: //callback-url.operation-level/v1
-                  description: Operation level server 1 (Operation override)
-                - url: //callback-url.operation-level/v2
-                  description: Operation level server 2 (Operation override)
-              requestBody:
-                content:
-                  application/json:
-                    schema:
-                      type: object
-                      properties:
-                        orderId:
-                          type: string
-                          example: '123'
-                        timestamp:
-                          type: string
-                          format: date-time
-                          example: '2018-10-19T16:46:45Z'
-                        status:
-                          type: string
-                          example: 'inProgress'
-                  application/xml:
-                    schema:
-                      type: object
-                      properties:
-                        orderId:
-                          type: string
-                          example: '123'
-                    example: |
-                      <?xml version="1.0" encoding="UTF-8"?>
-                      <root>
-                        <orderId>123</orderId>
-                        <status>inProgress</status>
-                        <timestamp>2018-10-19T16:46:45Z</timestamp>
-                      </root>
-              responses:
-                '200':
-                  description: Callback successfully processed and no retries will be performed
-                  content:
-                    application/json:
-                      schema:
-                        type: object
-                        properties:
-                          someProp:
-                            type: string
-                            example: '123'
-        orderShipped:
-          '{$request.body#/callbackUrl}?event={$request.body#/eventName}':
-            post:
-              description: |
-                Very long description
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
-                nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-                culpa qui officia deserunt mollit anim id est laborum.
-              requestBody:
-                content:
-                  application/json:
-                    schema:
-                      type: object
-                      properties:
-                        orderId:
-                          type: string
-                          example: '123'
-                        timestamp:
-                          type: string
-                          format: date-time
-                          example: '2018-10-19T16:46:45Z'
-                        estimatedDeliveryDate:
-                          type: string
-                          format: date-time
-                          example: '2018-11-11T16:00:00Z'
-              responses:
-                '200':
-                  description: Callback successfully processed and no retries will be performed
-        orderDelivered:
-          'http://notificationServer.com?url={$request.body#/callbackUrl}&event={$request.body#/eventName}':
-            post:
-              deprecated: true
-              summary: Order delivered
-              description: A callback triggered every time an Order is delivered to the recipient
-              requestBody:
-                content:
-                  application/json:
-                    schema:
-                      type: object
-                      properties:
-                        orderId:
-                          type: string
-                          example: '123'
-                        timestamp:
-                          type: string
-                          format: date-time
-                          example: '2018-10-19T16:46:45Z'
-              responses:
-                '200':
-                  description: Callback successfully processed and no retries will be performed
-  /user:
-    post:
-      tags:
-        - user
-      summary: Create user
-      description: This can only be done by the logged in user.
-      operationId: createUser
-      responses:
-        default:
-          description: successful operation
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/User'
-        description: Created user object
-        required: true
-  '/user/{username}':
-    get:
-      tags:
-        - user
-      summary: Get user by user name
-      description: ''
-      operationId: getUserByName
-      parameters:
-        - name: username
-          in: path
-          description: 'The name that needs to be fetched. Use user1 for testing. '
-          required: true
-          schema:
-            type: string
+      summary: Clear all cart items
+      operationId: delete-v2-carts-cart_id-items
       responses:
         '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/User'
-        '400':
-          description: Invalid username supplied
+          $ref: '#/components/responses/200-Cart'
         '404':
-          description: User not found
+          $ref: '#/components/responses/404-Cart'
+      description: Delete all items in a cart
+      tags:
+        - Carts
+  '/v2/carts/{cart_id}/items/{item_id}':
+    parameters:
+      - $ref: '#/components/parameters/cart_id'
+      - $ref: '#/components/parameters/item_id'
+    get:
+      summary: Retrieve cart item data
+      tags:
+        - Carts
+      responses:
+        '200':
+          $ref: '#/components/responses/200-Cart'
+        '404':
+          $ref: '#/components/responses/404-Cart'
+      operationId: get-v2-carts-cart_id)-items-item_id
+      description: |
+        Get extended data of a specific item in the cart.
+         
+        The `item_id` parameter corresponds to the `sn_booking_code`.
     put:
-      tags:
-        - user
-      summary: Updated user
-      description: This can only be done by the logged in user.
-      operationId: updateUser
-      parameters:
-        - name: username
-          in: path
-          description: name that need to be deleted
-          required: true
-          schema:
-            type: string
-      responses:
-        '400':
-          description: Invalid user supplied
-        '404':
-          description: User not found
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/User'
-        description: Updated user object
-        required: true
-    delete:
-      tags:
-        - user
-      summary: Delete user
-      description: This can only be done by the logged in user.
-      operationId: deleteUser
-      parameters:
-        - name: username
-          in: path
-          description: The name that needs to be deleted
-          required: true
-          schema:
-            type: string
-      responses:
-        '400':
-          description: Invalid username supplied
-        '404':
-          description: User not found
-  /user/createWithArray:
-    post:
-      tags:
-        - user
-      summary: Creates list of users with given input array
-      description: ''
-      operationId: createUsersWithArrayInput
-      responses:
-        default:
-          description: successful operation
-      requestBody:
-        $ref: '#/components/requestBodies/UserArray'
-  /user/createWithList:
-    post:
-      tags:
-        - user
-      summary: Creates list of users with given input array
-      description: ''
-      operationId: createUsersWithListInput
-      responses:
-        default:
-          description: successful operation
-      requestBody:
-        $ref: '#/components/requestBodies/UserArray'
-  /user/login:
-    get:
-      tags:
-        - user
-      summary: Logs user into the system
-      description: ''
-      operationId: loginUser
-      parameters:
-        - name: username
-          in: query
-          description: The user name for login
-          required: true
-          schema:
-            type: string
-        - name: password
-          in: query
-          description: The password for login in clear text
-          required: true
-          schema:
-            type: string
+      summary: Modify cart item data
+      operationId: put-v2-carts-cart_id-items-item_id
       responses:
         '200':
-          description: successful operation
-          headers:
-            X-Rate-Limit:
-              description: calls per hour allowed by the user
-              schema:
-                type: integer
-                format: int32
-            X-Expires-After:
-              description: date in UTC when token expires
-              schema:
-                type: string
-                format: date-time
-          content:
-            application/json:
-              schema:
-                type: string
-              examples:
-                response:
-                  value: OK
-            application/xml:
-              schema:
-                type: string
-              examples:
-                response:
-                  value: <Message> OK </Message>
-            text/plain:
-              examples:
-                response:
-                  value: OK
-        '400':
-          description: Invalid username/password supplied
-  /user/logout:
-    get:
+          $ref: '#/components/responses/200-Cart'
+        '404':
+          $ref: '#/components/responses/404-Cart'
+      description: |
+        Modify an existing item in the cart
+
+        The `item_id` parameter corresponds to the `sn_booking_code`.
       tags:
-        - user
-      summary: Logs out current logged in user session
-      description: ''
-      operationId: logoutUser
+        - Carts
+    delete:
+      summary: Delete cart item
+      operationId: delete-v2-carts-cart_id-items-item_id
       responses:
-        default:
-          description: successful operation
+        '200':
+          $ref: '#/components/responses/200-CartItem'
+      tags:
+        - Carts
+      description: |-
+        Delete an existing item in the cart
+
+
+        The `item_id` parameter corresponds to the `sn_booking_code`. 
+
+        <!-- theme: danger -->
+        > **IMPORTANT**: This action cannot be reverted, the item will be permanently deleted for the cart in the process.
+  '/v2/carts/{cart_id}/guest':
+    parameters:
+      - $ref: '#/components/parameters/cart_id'
+    get:
+      summary: Retrieve cart guest fields
+      tags:
+        - Carts
+      responses: {}
+      operationId: get-v2-carts-cart_id-guest
+      description: "\t\nGet all fields required to be associated to the items in the cart"
+    post:
+      summary: Set cart guest fields
+      operationId: post-v2-carts-cart_id-guest
+      responses:
+        '200':
+          description: OK
+      description: Set all fields required to be associated to the items in the cart
+      tags:
+        - Carts
+  /v2/bookings:
+    get:
+      summary: List bookings
+      tags:
+        - Bookings
+      responses:
+        '200':
+          $ref: '#/components/responses/200-Booking'
+      operationId: get-v2-bookings
+      description: 'Search for bookings based on different criteria. '
+    post:
+      summary: Create a booking
+      operationId: post-v2-bookings
+      responses:
+        '200':
+          description: OK
+      tags:
+        - Bookings
+      requestBody:
+        $ref: '#/components/requestBodies/Booking'
+      description: 'Create a booking for all items contained in the Cart. '
+  '/v2/bookings/{booking_id}':
+    parameters:
+      - $ref: '#/components/parameters/booking_id'
+    get:
+      summary: Retrieve a booking
+      tags:
+        - Bookings
+      responses:
+        '200':
+          $ref: '#/components/responses/200-Booking'
+      operationId: get-v2-bookings-booking_id
+      description: Get a booking detail
+    delete:
+      summary: Delete a booking
+      operationId: delete-v2-bookings-booking_id
+      responses:
+        '200':
+          description: OK
+      description: Cancel all items in the booking
+      tags:
+        - Bookings
+  '/v2/bookings{booking_id}/items':
+    parameters:
+      - $ref: '#/components/parameters/booking_id'
+    get:
+      summary: Retrieve booking items
+      tags:
+        - Bookings
+      responses:
+        '200':
+          $ref: '#/components/responses/200-Booking'
+      operationId: get-v2-bookings-booking_id-items
+      description: 'Get all the items extended data for a booking. '
+  '/v2/bookings/{booking_id}/items/{item_id}':
+    parameters:
+      - $ref: '#/components/parameters/booking_id'
+      - $ref: '#/components/parameters/item_id'
+    put:
+      summary: Update booking item
+      operationId: put-v2-bookings-booking_id-items-item_id
+      responses:
+        '200':
+          $ref: '#/components/responses/200-Booking'
+      description: ''
+      tags:
+        - Bookings
+    delete:
+      summary: Cancel booking item
+      operationId: delete-v2-bookings-booking_id-items-item_id
+      responses:
+        '200':
+          description: OK
+      tags:
+        - Bookings
 components:
+  securitySchemes:
+    SIMPLENIGHT-API-KEY:
+      name: X-API-KEY
+      type: apiKey
+      in: header
+      description: Simplenight API key
+  parameters:
+    dst_geolocation:
+      name: dst_geolocation
+      in: query
+      required: true
+      schema:
+        type: string
+        example: '40.750221,-73.93689'
+      description: 'Latitude `[-90 to 90]` and longitude ` [-180 to 180]`, separated by commas. Using this parameter requires **not** using the `inventory_ids` parameter.'
+    inventory_ids:
+      name: inventory_ids
+      in: query
+      required: true
+      schema:
+        type: string
+      description: 'List of inventory_ids, formatted as: `supplier_id:hotel_id`, separated by commas. Using this parameter requires **not** using the `dst_geolocation` parameter.'
+    adults:
+      name: adults
+      in: query
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 10
+        default: 2
+      description: Number of adults.
+    children:
+      name: children
+      in: query
+      schema:
+        type: integer
+        minimum: 0
+        maximum: 10
+      description: Number of children. Must be equal to the length of children_ages parameter if used.
+    children_ages:
+      name: children_ages
+      in: query
+      required: false
+      schema:
+        type: integer
+        default: 10
+        minimum: 0
+        maximum: 17
+      description: 'List of children ages, separated by commas. '
+    currency:
+      name: currency
+      in: query
+      required: false
+      schema:
+        type: string
+        default: USD
+        enum:
+          - USD
+          - CAD
+          - CHF
+          - EUR
+          - GBP
+          - JPY
+          - MXN
+          - UYU
+      description: 'Hotel price currency. '
+    customer_transaction_id:
+      name: customer_transaction_id
+      in: query
+      required: false
+      schema:
+        type: string
+        maxLength: 100
+      description: 'Customer transaction id. '
+    end_date:
+      name: end_date
+      in: query
+      required: false
+      schema:
+        type: string
+        format: date
+        example: '2023-01-02'
+      description: End date of stay (Optional but it must be present if start_date is present)
+    lang:
+      name: lang
+      in: query
+      required: false
+      schema:
+        type: string
+        enum:
+          - en
+          - de
+          - es
+          - fr
+        default: en
+      description: Response language.
+    limit:
+      name: limit
+      in: query
+      required: false
+      schema:
+        type: string
+      description: Max amount of hotels to retrieve. By default there is no limit.
+    meal_types:
+      name: meal_types
+      in: query
+      required: false
+      schema:
+        type: string
+      description: 'List of meal types, separated by comma. '
+    radius:
+      name: radius
+      in: query
+      required: false
+      schema:
+        type: integer
+        default: 15
+        maximum: 50
+        minimum: 1
+      description: 'Hotel search radius based on latitude and longitude. Used with the "dst_geolocation" parameter. '
+    rate_type:
+      name: rate_type
+      in: query
+      required: false
+      schema:
+        type: string
+        enum:
+          - SN_PUBLIC
+          - SN_PACKAGING
+          - SN_RETAIL
+        default: SN_PUBLIC
+      description: 'Rate type. '
+    room_codes:
+      name: room_codes
+      in: query
+      required: false
+      schema:
+        type: string
+      description: Room codes.
+    rooms:
+      name: rooms
+      in: query
+      schema:
+        type: integer
+        default: 1
+        minimum: 1
+        maximum: 10
+      description: Number of rooms.
+    rsp_fields:
+      name: rsp_fields
+      in: query
+      required: false
+      schema:
+        type: string
+        example: '-rooms'
+      description: 'Fields to exclude in the response, separated by commas. Field must contain the "-" prefix in order to be excluded.'
+    rsp_fields_set:
+      name: rsp_fields_set
+      in: query
+      required: false
+      schema:
+        type: string
+        enum:
+          - basic
+          - extended
+      description: 'Specifies sets of fields to include or exclude. Basic excludes the following fields: -rooms,-details.facilities,-details.description,-photos, -details.checkin_time,-details.checkout_time Extended excludes the following field: -suggested_retail_total_amount'
+    sort:
+      name: sort
+      in: query
+      required: false
+      schema:
+        type: string
+        enum:
+          - distance
+          - price
+          - ranking
+          - star_rating
+      description: Sort hotels based on criteria. Using the " - " prefix will reverse the order.
+    star_date:
+      name: star_date
+      in: query
+      schema:
+        type: string
+        format: date
+        example: '2022-12-31'
+      description: Start date of stay (Optional but it must be present if end_date is present).
+    unit:
+      name: distance_unit
+      in: query
+      required: false
+      schema:
+        type: string
+        default: mi
+        enum:
+          - f
+          - km
+          - mi
+          - m
+      description: Distance unit of measurement.
+    filter_star_rating:
+      name: star_rating
+      in: query
+      required: false
+      schema:
+        type: number
+      description: 'Filter result by star rating. '
+    filter_max_price:
+      name: max_price
+      in: query
+      required: false
+      schema:
+        type: number
+      description: 'Filter: max price.'
+    filter_min_price:
+      name: min_price
+      in: query
+      required: false
+      schema:
+        type: number
+      description: 'Filter: min price. '
+    hotel_id:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: string
+        pattern: '^[\w:]+$'
+        example: 'supplier_id:hotel_id'
+      description: 'Hotel ID, formatted as `supplier_id:hotel_id`.'
+    cart_id:
+      name: cart_id
+      in: path
+      schema:
+        type: string
+        example: 8021822f-79c8-4ab7-92ec-2f53343887f6
+      description: Cart ID
+      required: true
+    item_id:
+      name: item_id
+      in: path
+      required: true
+      schema:
+        type: string
+      description: Item ID
+    booking_id:
+      name: booking_id
+      in: path
+      required: true
+      schema:
+        type: string
+      description: Booking ID
   schemas:
-    ApiResponse:
+    Adults:
+      type: integer
+      title: Adults
+      x-stoplight:
+        id: gos8si8kl4zrs
+      minimum: 1
+      maximum: 10
+      description: Number of adults.
+      x-internal: false
+    Children:
+      type: integer
+      title: Children
+      x-stoplight:
+        id: dn362kcx97p9v
+      minimum: 0
+      maximum: 10
+      description: Number of children.
+      x-internal: false
+    ChildrenAges:
+      type: array
+      title: ChildrenAges
+      x-stoplight:
+        id: uzpqxuz12eoz3
+      description: List of children ages.
+      minItems: 1
+      maxItems: 10
+      items:
+        type: integer
+        minimum: 0
+        maximum: 17
+      x-internal: false
+    Currency:
+      type: string
+      enum:
+        - USD
+        - AUD
+        - CAD
+        - CHF
+        - EUR
+        - GBP
+        - JPY
+        - MXN
+        - UYU
+      title: Currency
+      description: Currency code.
+      x-internal: false
+    CustomerTransactionId:
+      title: CustomerTransactionId
+      x-stoplight:
+        id: r3bzkxn821n20
+      type: string
+      description: Customer transaction id.
+      x-internal: true
+    StartDate:
+      type: string
+      title: StartDate
+      x-stoplight:
+        id: 5q0kwunand4oy
+      format: date
+      description: Start day of the stay.
+      x-internal: false
+    EndDate:
+      type: string
+      title: EndDate
+      x-stoplight:
+        id: ovd8ny3ae6dtx
+      format: date
+      description: End date of the stay.
+      x-internal: false
+    Language:
+      type: string
+      title: Language
+      x-stoplight:
+        id: x61vortkajblq
+      enum:
+        - en
+        - es
+        - de
+        - fr
+      description: Language code.
+      x-internal: false
+    Limit:
+      title: Limit
+      x-stoplight:
+        id: cvowr4znl5xqe
+      type: integer
+      description: Max number of hotels to retrieve.
+      x-internal: false
+    MealTypes:
+      title: MealTypes
+      x-stoplight:
+        id: rpc90hptdv6o5
+      description: Meal types.
+      type: string
+      x-internal: false
+    Radius:
+      type: number
+      title: Radius
+      x-stoplight:
+        id: fz7ofyzhf0m8k
+      description: Search radius.
+      minimum: 0
+      maximum: 50
+      x-internal: false
+    RateType:
+      type: string
+      title: RateType
+      x-stoplight:
+        id: uiy3hany3xicp
+      default: SN_PUBLIC
+      enum:
+        - SN_PUBLIC
+        - SN_PACKAGING
+        - SN_RETAIL
+      description: Rate type.
+      x-internal: false
+    RspFields:
+      title: RspField
+      x-stoplight:
+        id: ry0ppnxgyiv0l
+      description: Fields excluded in the response.
+      type: string
+      x-internal: false
+    RspFieldsSet:
+      type: string
+      title: RspFieldsSet
+      x-stoplight:
+        id: i35o5clu3ysdm
+      enum:
+        - basic
+        - extended
+      description: 'Fields included in the response. Basic or Extended presets. '
+      x-internal: false
+    Sort:
+      type: string
+      title: Sort
+      x-stoplight:
+        id: onvwu0t4d7aer
+      description: Sort criteria
+      enum:
+        - price
+        - distance
+        - star_rating
+        - ranking
+      x-internal: false
+    FilterStarRating:
+      type: object
+      title: FilterStarRating
+      x-stoplight:
+        id: 0be3ns959rt8s
+      description: Maxmimum and minimum star ratings.
+      minProperties: 2
+      maxProperties: 2
+      properties:
+        min:
+          type: number
+          minimum: 0
+          maximum: 5
+        max:
+          type: number
+          minimum: 0
+          maximum: 5
+      x-internal: false
+    FilterPrice:
+      title: FilterPrice
+      x-stoplight:
+        id: 92fsqja9z2u3p
+      type: object
+      description: Maxmimum and minimum price
+      properties:
+        is_total_price:
+          type: boolean
+        max:
+          type: number
+        min:
+          type: number
+      x-internal: false
+    EchoRequest:
+      title: EchoRequest
+      x-stoplight:
+        id: 0ci7wtr2ltdot
+      description: 'Parameters sent in the request. '
+      x-examples:
+        example-1: {}
+      x-internal: false
+      type: object
+      properties:
+        Search criteria:
+          oneOf:
+            - $ref: '#/components/schemas/DstGelocation'
+            - $ref: '#/components/schemas/InventoryIds'
+        adults:
+          $ref: '#/components/schemas/Adults'
+        children:
+          $ref: '#/components/schemas/Children'
+        children_ages:
+          $ref: '#/components/schemas/ChildrenAges'
+        currency:
+          $ref: '#/components/schemas/Currency'
+        customer_transaction_id:
+          $ref: '#/components/schemas/CustomerTransactionId'
+        start_date:
+          $ref: '#/components/schemas/StartDate'
+        end_date:
+          $ref: '#/components/schemas/EndDate'
+        lang:
+          $ref: '#/components/schemas/Language'
+        limit:
+          $ref: '#/components/schemas/Limit'
+        meal_types:
+          $ref: '#/components/schemas/MealTypes'
+        radius:
+          $ref: '#/components/schemas/Radius'
+        rate_type:
+          $ref: '#/components/schemas/RateType'
+        rsp_fields:
+          $ref: '#/components/schemas/RspFields'
+        rsp_fields_set:
+          $ref: '#/components/schemas/RspFieldsSet'
+        sort:
+          $ref: '#/components/schemas/Sort'
+        unit:
+          $ref: '#/components/schemas/Unit'
+        star_rating:
+          $ref: '#/components/schemas/FilterStarRating'
+        price:
+          $ref: '#/components/schemas/FilterPrice'
+    DstGelocation:
+      title: DstGeolocation
+      x-stoplight:
+        id: buf7ord07hqqb
+      type: object
+      description: Latitude and longitude.
+      properties:
+        latitude:
+          type: number
+          minimum: -90
+          maximum: 90
+        longitude:
+          type: number
+          minimum: -180
+          maximum: 180
+      x-examples:
+        example-1:
+          latitude: 40.73061
+          longitude: -73.935242
+      x-internal: false
+    InventoryIds:
+      title: InventoryIds
+      x-stoplight:
+        id: sft82cl8wxnao
+      description: 'Array of inventory ids. Formated as: `supplier_id:hotel_id`'
+      type: object
+      properties:
+        inventory_ids:
+          type: array
+          items:
+            type: string
+      x-internal: false
+    Unit:
+      type: string
+      title: Unit
+      x-stoplight:
+        id: 7jxbrltxmor94
+      description: Units of measurement
+      enum:
+        - mi
+        - m
+        - km
+        - ft
+      default: mi
+      x-internal: false
+    Photos:
+      title: Photos
+      x-stoplight:
+        id: cey30gi29rk7o
+      type: array
+      items:
+        type: object
+        properties:
+          text:
+            type: string
+            maxLength: 8192
+          url:
+            type: string
+            maxLength: 4096
+        required:
+          - text
+          - url
+      description: Array of objects contaning photo url and name.
+      x-internal: false
+    Hotels:
+      title: Hotels
+      x-stoplight:
+        id: l2y0363z215ct
+      type: array
+      description: 'Array containing a list of hotel objects matching the search criteria. If no hotels are found, an empty array is returned.'
+      x-internal: false
+      items:
+        type: object
+        properties:
+          hotel_id:
+            type: string
+            maxLength: 255
+            description: 'Hotel ID formatted as `supplier_id:hotel_id`'
+            readOnly: true
+          giata_hotel_id:
+            type: string
+            description: |
+              Unique ID for the Hotel
+            readOnly: true
+          amount_min:
+            $ref: '#/components/schemas/Money'
+          rooms:
+            type: array
+            description: List of rooms matching the search criteri
+            items:
+              $ref: '#/components/schemas/Rooms'
+          details:
+            $ref: '#/components/schemas/Details'
+          thumbnail:
+            type: string
+            maxLength: 1024
+            format: thumbnail
+            readOnly: true
+          photos:
+            $ref: '#/components/schemas/Photos'
+          relative_position:
+            $ref: '#/components/schemas/RelativePosition'
+          relevance:
+            type: integer
+            readOnly: true
+          min_rate_room:
+            $ref: '#/components/schemas/Rooms'
+        required:
+          - hotel_id
+          - thumbnail
+    Money:
+      title: Money
+      x-stoplight:
+        id: bgjhgvdhb39wt
+      type: object
+      x-internal: false
+      description: ''
+      properties:
+        amount:
+          type: number
+          description: Cost with no currency format.
+          readOnly: true
+        formatted:
+          type: string
+          description: Combination of ammount and seleted currency.
+        currency:
+          $ref: '#/components/schemas/Currency'
+    Phone:
+      title: Phone
+      x-stoplight:
+        id: o5644d5o8dm49
+      type: object
+      x-internal: false
+      properties:
+        phone_number:
+          type: string
+          maxLength: 255
+          readOnly: true
+        phone_type:
+          type: string
+          maxLength: 255
+          readOnly: true
+    Phones:
+      title: Phones
+      x-stoplight:
+        id: sptmkvky6odit
+      type: array
+      items:
+        $ref: '#/components/schemas/Phone'
+      description: List of phones
+      x-internal: false
+    Chain:
+      title: Chain
+      x-stoplight:
+        id: jae0twwge0bcy
+      type: object
+      properties:
+        chain_code:
+          type: string
+          maxLength: 50
+          readOnly: true
+        chain_name:
+          type: string
+          maxLength: 255
+          readOnly: true
+      x-internal: false
+      description: Hotel chain
+    Coordinates:
+      title: Coordinates
+      x-stoplight:
+        id: crbctulddc0zn
+      type: object
+      description: Latitude and longitude
+      properties:
+        latitude:
+          type: number
+          minimum: -90
+          maximum: 90
+          readOnly: true
+        longitude:
+          type: number
+          minimum: -180
+          maximum: 180
+          readOnly: true
+      required:
+        - latitude
+      x-internal: false
+    Address:
+      title: Address
+      x-stoplight:
+        id: 9yx0n5smiqoiw
+      type: object
+      description: Accomodation address.
+      properties:
+        id:
+          $ref: '#/components/schemas/Coordinates'
+        country_code:
+          type: string
+          maxLength: 2
+        country:
+          type: string
+          maxLength: 255
+        state:
+          type: string
+          maxLength: 50
+          readOnly: true
+        city:
+          type: string
+          maxLength: 50
+          readOnly: true
+        zone:
+          type: string
+          maxLength: 255
+          readOnly: true
+        district:
+          type: string
+          maxLength: 50
+          readOnly: true
+        address1:
+          type: string
+          maxLength: 255
+          readOnly: true
+        address2:
+          type: string
+          maxLength: 255
+          readOnly: true
+        postal_code:
+          type: string
+          maxLength: 10
+          readOnly: true
+      required:
+        - id
+      x-internal: false
+    Details:
+      title: Details
+      x-stoplight:
+        id: zqi9u0ed4k812
+      type: object
+      properties:
+        address:
+          $ref: '#/components/schemas/Address'
+        chain:
+          $ref: '#/components/schemas/Chain'
+        checkin_time:
+          type: string
+          format: time
+          maxLength: 8
+          readOnly: true
+        checkout_time:
+          type: string
+          format: time
+          readOnly: true
+        description:
+          type: string
+          maxLength: 8192
+          readOnly: true
+        facilities:
+          type: array
+          items:
+            type: string
+            readOnly: true
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+          readOnly: true
+        phones:
+          $ref: '#/components/schemas/Phones'
+        star_rating:
+          type: string
+          maxLength: 3
+          readOnly: true
+        type:
+          type: string
+          maxLength: 255
+          readOnly: true
+        web:
+          type: string
+          maxLength: 255
+      required:
+        - description
+        - name
+        - type
+      x-internal: false
+    NearTo:
+      title: NearTo
+      x-stoplight:
+        id: y5buhus2j07ff
+      type: object
+      properties:
+        location_type:
+          type: string
+          readOnly: true
+        location_code:
+          type: string
+        location_name:
+          type: string
+        distance:
+          type: string
+      required:
+        - location_type
+      x-internal: false
+    RelativePosition:
+      title: RelativePosition
+      x-stoplight:
+        id: mvtgpwgjucgyz
+      type: object
+      properties:
+        distance:
+          type: string
+          readOnly: true
+        distance_unit:
+          $ref: '#/components/schemas/Unit'
+        near_to:
+          type: array
+          items:
+            $ref: '#/components/schemas/NearTo'
+          readOnly: true
+        distance_to_city_centre:
+          type: number
+          readOnly: true
+        distance_to_nearest_airport:
+          type: number
+          readOnly: true
+      x-internal: false
+    Capacity:
+      title: Capacity
+      x-stoplight:
+        id: hcsh30l9z2x20
+      type: object
+      properties:
+        min_pax:
+          type: integer
+          exclusiveMaximum: false
+          minimum: 0
+          exclusiveMinimum: true
+          readOnly: true
+        max_pax:
+          type: integer
+          minimum: 0
+          exclusiveMinimum: true
+          readOnly: true
+        min_adults:
+          type: integer
+          maximum: 0
+          exclusiveMaximum: true
+          readOnly: true
+        min_children:
+          type: integer
+          minimum: 0
+          readOnly: true
+        max_children:
+          type: integer
+          minimum: 0
+          readOnly: true
+      required:
+        - min_pax
+        - min_adults
+      x-internal: false
+    Services:
+      title: Services
+      x-stoplight:
+        id: mpphf79kqmqwp
+      type: object
+      properties:
+        double_beds:
+          type: integer
+          readOnly: true
+        free_breakfast:
+          type: boolean
+          readOnly: true
+        free_parking:
+          type: boolean
+          readOnly: true
+        free_wifi:
+          type: boolean
+          readOnly: true
+        other_beds:
+          type: integer
+          readOnly: true
+        queen_beds:
+          type: integer
+          readOnly: true
+        total_bathrooms:
+          type: integer
+          readOnly: true
+        total_beds:
+          type: integer
+          readOnly: true
+        total_rooms:
+          type: integer
+          readOnly: true
+      x-internal: false
+    Rooms:
+      title: Rooms
+      x-stoplight:
+        id: o016k6afyyth2
+      type: object
+      description: Room information matching the search criteria. The cheapest room is referenced under `min_rate_room`
+      x-internal: false
+      properties:
+        code:
+          type: string
+          maxLength: 255
+          description: Room code
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+          description: Room name
+          readOnly: true
+        description:
+          type: string
+          maxLength: 4096
+          description: Room description
+          readOnly: true
+        room_type:
+          type: string
+          maxLength: 255
+          readOnly: true
+        rates:
+          type: array
+          description: 'Room rates in the requested currency. The cheapest room matching the search criteria can be found in `min_rate`. More expensive options can be found within `upgrades`. '
+          items:
+            $ref: '#/components/schemas/RoomRates'
+        amenities:
+          type: array
+          description: Available amenities
+          items:
+            type: string
+          readOnly: true
+        capacity:
+          $ref: '#/components/schemas/Capacity'
+        photos:
+          $ref: '#/components/schemas/Photos'
+        services:
+          $ref: '#/components/schemas/Services'
+      required:
+        - code
+        - name
+        - description
+        - room_type
+        - capacity
+    RoomRates:
+      title: RoomRates
+      x-stoplight:
+        id: wupisa70zetp8
+      type: object
+      x-internal: false
+      description: 'Room rates in the requested currency. The cheapest room matching the search criteria can be found in `min_rate`. More expensive options can be found within `upgrades`. '
+      properties:
+        avg_ammount:
+          $ref: '#/components/schemas/Money'
+        min_rate:
+          $ref: '#/components/schemas/RoomRate'
+        upgrades:
+          type: array
+          description: List of possible room upgrades
+          items:
+            $ref: '#/components/schemas/RoomRate'
+      required:
+        - avg_ammount
+        - min_rate
+    RoomRate:
+      type: object
+      title: RoomRate
+      x-stoplight:
+        id: x7kstu3psdvp6
+      x-internal: false
+      properties:
+        sn_booking_code:
+          type: string
+          maxLength: 255
+          description: 'Unique Simplenight API booking code. This code is used to add the item to the cart. '
+          readOnly: true
+        booking_code_supplier:
+          type: string
+          maxLength: 255
+          readOnly: true
+        rate_type:
+          $ref: '#/components/schemas/RateType'
+        rate:
+          $ref: '#/components/schemas/Rate'
+        cancelation_policty:
+          $ref: '#/components/schemas/CancelationPolicy'
+        comments:
+          type: string
+          maxLength: 255
+          readOnly: true
+        meal_plan:
+          $ref: '#/components/schemas/MealPlan'
+        available_qty:
+          type: integer
+          readOnly: true
+        requires_validation_before_booking:
+          type: boolean
+          readOnly: true
+      required:
+        - sn_booking_code
+        - booking_code_supplier
+        - rate_type
+        - rate
+        - meal_plan
+        - available_qty
+        - requires_validation_before_booking
+      readOnly: true
+      description: Room rate breakdown.
+    CancelationPolicy:
+      title: CancelationPolicy
+      x-stoplight:
+        id: v0jlt9y0bezbc
+      type: object
+      x-internal: false
+      properties:
+        description:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/CancelationPolicyDetails'
+      description: 'Cancelation policy details(prices, dates, etc) and description'
+    MealPlan:
+      title: MealPlan
+      x-stoplight:
+        id: 9ik8pkc22d4qz
       type: object
       properties:
         code:
+          type: string
+          maxLength: 255
+          readOnly: true
+        text:
+          type: string
+          maxLength: 255
+          readOnly: true
+      x-internal: false
+    Rate:
+      title: Rate
+      x-stoplight:
+        id: guw84iyq9mi0b
+      type: object
+      properties:
+        suggested_retail_total_ammount:
+          $ref: '#/components/schemas/Money'
+        rate_breakdown:
+          $ref: '#/components/schemas/RateBreakdown'
+      x-internal: false
+    RateBreakdown:
+      title: RateBreakdown
+      x-stoplight:
+        id: 1z6exnkugxsm9
+      type: object
+      properties:
+        daily_rates:
+          $ref: '#/components/schemas/DailyRates'
+        diff_min_rate:
+          $ref: '#/components/schemas/Money'
+        discounts:
+          $ref: '#/components/schemas/PriceAdjust'
+        extra_charges:
+          $ref: '#/components/schemas/PriceAdjust'
+        markups:
+          $ref: '#/components/schemas/PriceAdjust'
+        rate_type:
+          $ref: '#/components/schemas/RateType'
+        total_amount:
+          $ref: '#/components/schemas/Money'
+        total_post_paid:
+          $ref: '#/components/schemas/Money'
+      required:
+        - diff_min_rate
+        - rate_type
+        - total_amount
+        - total_post_paid
+      x-internal: false
+    DailyRates:
+      title: DailyRates
+      x-stoplight:
+        id: 73ezx61e83610
+      type: object
+      properties:
+        avg:
+          $ref: '#/components/schemas/Money'
+      required:
+        - avg
+      x-internal: true
+    PriceAdjust:
+      title: PriceAdjust
+      x-stoplight:
+        id: timjztsi2mylh
+      type: object
+      properties:
+        amount_to_apply:
+          $ref: '#/components/schemas/Money'
+        breakdown:
+          type: array
+          items:
+            $ref: '#/components/schemas/Breakdown'
+          readOnly: true
+        total_amount_before_apply:
+          $ref: '#/components/schemas/Money'
+      required:
+        - amount_to_apply
+        - total_amount_before_apply
+      x-internal: false
+    Breakdown:
+      title: Breakdown
+      x-stoplight:
+        id: 0ph0te2wakjdo
+      type: object
+      properties:
+        amount:
+          $ref: '#/components/schemas/Money'
+        description:
+          type: string
+          maxLength: 255
+          readOnly: true
+        percentage:
+          type: number
+          readOnly: true
+        source:
+          type: string
+          enum:
+            - SIMPLENIGHT
+            - SUPPLIER
+          readOnly: true
+      required:
+        - amount
+        - description
+        - percentage
+        - source
+      x-internal: false
+    Cart:
+      title: Cart
+      x-stoplight:
+        id: x7010337y1xva
+      type: object
+      description: ''
+      properties:
+        cart_id:
+          type: string
+        created_at:
+          $ref: '#/components/schemas/DateTime'
+        currency:
+          $ref: '#/components/schemas/Currency'
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CartItem'
+        last_updated_at:
+          $ref: '#/components/schemas/DateTime'
+        organization_id:
+          type: string
+        status:
+          $ref: '#/components/schemas/CartStatus'
+        total_amount_post_paid:
+          $ref: '#/components/schemas/Money'
+        total_amount_taxes_postpaid:
+          $ref: '#/components/schemas/Money'
+        total_amount_taxes:
+          $ref: '#/components/schemas/Money'
+        total_amount:
+          $ref: '#/components/schemas/Money'
+        total_item_qty:
           type: integer
-          format: int32
-        type:
-          type: string
-        message:
-          type: string
-    Cat:
-      description: A representation of a cat
-      allOf:
-        - $ref: '#/components/schemas/Pet'
-        - type: object
-          properties:
-            huntingSkill:
-              type: string
-              description: The measured skill for hunting
-              default: lazy
-              example: adventurous
-              enum:
-                - clueless
-                - lazy
-                - adventurous
-                - aggressive
-          required:
-            - huntingSkill
-    Category:
+    DateTime:
+      type: string
+      title: DateTime
+      x-stoplight:
+        id: j1lix4sivabm5
+      format: date-time
+    CartItem:
+      title: CartItem
+      x-stoplight:
+        id: 9p3q709s7k7yf
       type: object
       properties:
-        id:
-          description: Category ID
-          allOf:
-            - $ref: '#/components/schemas/Id'
-        name:
-          description: Category name
+        cart_id:
           type: string
-          minLength: 1
-        sub:
-          description: Test Sub Category
+        cart_item_id:
+          type: string
+        category:
+          $ref: '#/components/schemas/Category'
+        created_at:
+          $ref: '#/components/schemas/DateTime'
+        customer_additional_requests:
+          type: string
+        customer:
+          $ref: '#/components/schemas/Customer'
+        extended_data:
           type: object
-          properties:
-            prop1:
-              type: string
-              description: Dumb Property
-      xml:
-        name: Category
-    Dog:
-      description: A representation of a dog
-      allOf:
-        - $ref: '#/components/schemas/Pet'
-        - type: object
-          properties:
-            packSize:
-              type: integer
-              format: int32
-              description: The size of the pack the dog is from
-              default: 1
-              minimum: 1
-          required:
-            - packSize
-    HoneyBee:
-      description: A representation of a honey bee
-      allOf:
-        - $ref: '#/components/schemas/Pet'
-        - type: object
-          properties:
-            honeyPerDay:
-              type: number
-              description: Average amount of honey produced per day in ounces
-              example: 3.14
-              multipleOf: .01
-          required:
-            - honeyPerDay
-    Id:
-      type: integer
-      format: int64
-      readOnly: true
-    Order:
-      type: object
-      properties:
-        id:
-          description: Order ID
-          allOf:
-            - $ref: '#/components/schemas/Id'
-        petId:
-          description: Pet ID
-          allOf:
-            - $ref: '#/components/schemas/Id'
+        inventory_id:
+          type: string
+        inventory_name:
+          type: string
+        last_validated_rate:
+          type: object
         quantity:
           type: integer
-          format: int32
-          minimum: 1
-          default: 1
-        shipDate:
-          description: Estimated ship date
+        rate:
+          $ref: '#/components/schemas/RateType'
+        sn_booking_code:
           type: string
-          format: date-time
         status:
+          $ref: '#/components/schemas/CartItemStatus'
+        supplier:
           type: string
-          description: Order Status
-          enum:
-            - placed
-            - approved
-            - delivered
-        complete:
-          description: Indicates whenever order was completed or not
-          type: boolean
-          default: false
-          readOnly: true
-        requestId:
-          description: Unique Request Id
+        thumbnail_url:
           type: string
-          writeOnly: true
-      xml:
-        name: Order
-    Pet:
+    Category:
+      type: string
+      title: Category
+      x-stoplight:
+        id: 97gmg7bx74h7x
+      description: Item categories supported by the API
+      enum:
+        - HOTELS
+        - FLIGHTS
+    Customer:
+      title: Customer
+      x-stoplight:
+        id: d21728twchwda
       type: object
-      required:
-        - name
-        - photoUrls
-      discriminator:
-        propertyName: petType
-        mapping:
-          cat: '#/components/schemas/Cat'
-          dog: '#/components/schemas/Dog'
-          bee: '#/components/schemas/HoneyBee'
       properties:
         id:
-          externalDocs:
-            description: 'Find more info here'
-            url: 'https://example.com'
-          description: Pet ID
-          allOf:
-            - $ref: '#/components/schemas/Id'
-        category:
-          description: Categories this pet belongs to
-          allOf:
-            - $ref: '#/components/schemas/Category'
-        name:
-          description: The name given to a pet
+          type: integer
+        first_name:
           type: string
-          example: Guru
-        photoUrls:
-          description: The list of URL to a cute photos featuring pet
+        last_name:
+          type: string
+        phone_number:
+          type: string
+        phone_prefix:
+          type: string
+        email:
+          type: string
+        country:
+          type: string
+        extra_fields:
           type: array
-          maxItems: 20
-          xml:
-            name: photoUrl
-            wrapped: true
+          items: {}
+    CartItemStatus:
+      type: string
+      title: CartItemStatus
+      x-stoplight:
+        id: cucqhwk4smx9u
+      enum:
+        - active
+        - invalid
+        - no_availability
+        - price_increase
+        - price_decrease
+    CartStatus:
+      type: string
+      title: CartStatus
+      x-stoplight:
+        id: gr29gl1i7hyp9
+      enum:
+        - active
+        - booked
+        - invalid
+    Item:
+      title: Item
+      x-stoplight:
+        id: xfvr9yzrlo6tr
+      type: object
+      properties:
+        sn_booking_code:
+          type: string
+        inventory_id:
+          type: string
+        quantity:
+          type: integer
+      description: 'Request schema for cart item '
+    BillingAddress:
+      title: BillingAddress
+      x-stoplight:
+        id: 1k6vwq8c7mf7b
+      type: object
+      properties:
+        address2:
+          type: string
+        address3:
+          type: string
+        city:
+          type: string
+        province:
+          type: string
+        postal_code:
+          type: string
+        country:
+          type: string
+      description: ''
+    PaymentRequest:
+      title: PaymentRequest
+      x-stoplight:
+        id: 44ywvhapllnc7
+      type: object
+      properties:
+        payment_method:
+          type: string
+        payment_token:
+          type: string
+        billing_address:
+          $ref: '#/components/schemas/BillingAddress'
+    Booking:
+      title: Booking
+      x-stoplight:
+        id: 5zf24qofxspa1
+      type: object
+      properties:
+        booking_id:
+          type: string
+        created_at:
+          $ref: '#/components/schemas/DateTime'
+        customer_last_name:
+          type: string
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/BookingItem'
+        manual_charge_status:
+          $ref: '#/components/schemas/ManualChargeStatus'
+        order_total_postpaid:
+          $ref: '#/components/schemas/Money'
+        order_total:
+          $ref: '#/components/schemas/Money'
+        partner_url:
+          type: string
+        payments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Transaction'
+        primary_contact:
+          $ref: '#/components/schemas/Contact'
+        refounds_total:
+          $ref: '#/components/schemas/Money'
+        refounds:
+          type: array
+          items:
+            $ref: '#/components/schemas/Refound'
+        sandbox_mode:
+          type: boolean
+        sn_order_number:
+          type: string
+        status:
+          $ref: '#/components/schemas/BookingStatus'
+        tax_total_post_paid:
+          $ref: '#/components/schemas/Money'
+        tax_total:
+          $ref: '#/components/schemas/Money'
+        updated_at:
+          $ref: '#/components/schemas/DateTime'
+        supplier_total:
+          $ref: '#/components/schemas/Money'
+        sub_total:
+          $ref: '#/components/schemas/Money'
+    BookingStatus:
+      type: string
+      title: BookingStatus
+      x-stoplight:
+        id: pl8qwbq9o9xxl
+      enum:
+        - pending
+        - booked
+        - error_payment
+        - error_booking
+        - cancelled
+    Contact:
+      type: object
+      properties:
+        id:
+          type: integer
+        first_name:
+          type: string
+        last_name:
+          type: string
+        phone_number:
+          type: string
+        phone_prefix:
+          type: string
+        email:
+          type: string
+        country:
+          type: string
+        extra_fields:
+          type: object
+          properties: {}
+      x-examples:
+        example-1:
+          id: 0
+          first_name: string
+          last_name: string
+          phone_number: string
+          phone_prefix: string
+          email: string
+          country: string
+          extra_fields: {}
+      title: Contact
+    ManualChargeStatus:
+      type: string
+      title: ManualChargeStatus
+      x-stoplight:
+        id: x49c113lvekhm
+      enum:
+        - NOT_APPLICABLE
+    PaymentData:
+      title: PaymentData
+      x-stoplight:
+        id: g57fim2p8gsgx
+      type: object
+      properties:
+        id:
+          type: string
+        status:
+          type: string
+        order_id:
+          type: string
+        created_at:
+          $ref: '#/components/schemas/DateTime'
+        updated_at:
+          $ref: '#/components/schemas/DateTime'
+        location_id:
+          type: string
+        source_type:
+          type: string
+        total_money:
+          $ref: '#/components/schemas/Money'
+        amount_money:
+          $ref: '#/components/schemas/Money'
+        capabilities:
+          type: array
           items:
             type: string
-            format: url
-        friend:
-          allOf:
-            - $ref: '#/components/schemas/Pet'
-        tags:
-          description: Tags attached to the pet
-          type: array
-          minItems: 1
-          xml:
-            name: tag
-            wrapped: true
-          items:
-            $ref: '#/components/schemas/Tag'
+        card_details:
+          $ref: '#/components/schemas/CardDetails'
+        delay_action:
+          type: string
+        deleted_until:
+          type: string
+        version_token:
+          type: string
+        approved_money:
+          $ref: '#/components/schemas/Money'
+        delay_duration:
+          type: string
+        receipt_number:
+          type: string
+        application_details:
+          type: object
+          properties:
+            application_id:
+              type: string
+            square_product:
+              type: string
+    Card:
+      title: Card
+      x-stoplight:
+        id: gdztr8im6qnji
+      type: object
+      properties:
+        bin:
+          type: string
+        last_4:
+          type: string
+        exp_year:
+          type: integer
+        card_type:
+          type: string
+        exp_month:
+          type: integer
+          minimum: 1
+          maximum: 12
+        card_brand:
+          type: string
+        fingerprint:
+          type: string
+        prepaid_type:
+          type: string
+    CardDetails:
+      title: CardDetails
+      x-stoplight:
+        id: 65yx8zmt9zuo7
+      type: object
+      properties:
+        card:
+          $ref: '#/components/schemas/Card'
         status:
           type: string
-          description: Pet status in the store
+        avs_status:
+          type: string
+        cvv_status:
+          type: string
+        entry_method:
+          type: string
+        card_payment_timeline:
+          type: object
+          properties:
+            authorized_at:
+              $ref: '#/components/schemas/DateTime'
+        statement_description:
+          type: string
+    Transaction:
+      title: Transaction
+      x-stoplight:
+        id: 1sem3e5m1jatj
+      type: object
+      properties:
+        supplier:
+          type: string
+        transaction_amount:
+          $ref: '#/components/schemas/Money'
+        transaction_status:
+          type: string
+        supplier_charge_id:
+          type: string
+        transaction_type:
+          type: string
           enum:
-            - available
-            - pending
-            - sold
-        petType:
-          description: Type of a pet
+            - CHARGE
+            - REFOUND
+        transaction_time:
+          $ref: '#/components/schemas/DateTime'
+        payment_token:
           type: string
-      xml:
-        name: Pet
-    Tag:
+        card_brand:
+          type: string
+        last_four:
+          type: string
+        payment_source_type:
+          type: string
+        error_detail:
+          type: string
+        extra_data:
+          type: object
+          properties:
+            payment:
+              $ref: '#/components/schemas/PaymentData'
+            refound:
+              $ref: '#/components/schemas/Refound'
+    Refound:
+      title: Refound
+      x-stoplight:
+        id: u2p57t9m7oe2f
       type: object
       properties:
         id:
-          description: Tag ID
-          allOf:
-            - $ref: '#/components/schemas/Id'
-        name:
-          description: Tag name
           type: string
-          minLength: 1
-      xml:
-        name: Tag
-    User:
+        reason:
+          type: string
+        status:
+          type: string
+        order_id:
+          type: string
+        created_at:
+          type: string
+        payment_id:
+          type: string
+        updated_at:
+          type: string
+        location_id:
+          type: string
+        amount_money:
+          $ref: '#/components/schemas/Money'
+    BookingItem:
+      title: BookingItem
+      x-stoplight:
+        id: kopz2tusb92lj
       type: object
       properties:
-        id:
-          $ref: '#/components/schemas/Id'
-        pet:
-          oneOf:
-            - $ref: '#/components/schemas/Pet'
-            - $ref: '#/components/schemas/Tag'
-        username:
-          description: User supplied username
-          type: string
-          minLength: 4
-          example: John78
-        firstName:
-          description: User first name
-          type: string
-          minLength: 1
-          example: John
-        lastName:
-          description: User last name
-          type: string
-          minLength: 1
-          example: Smith
-        email:
-          description: User email address
-          type: string
-          format: email
-          example: john.smith@example.com
-        password:
-          type: string
-          description: >-
-            User password, MUST contain a mix of upper and lower case letters,
-            as well as digits
-          format: password
-          minLength: 8
-          pattern: '/(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])/'
-          example: drowssaP123
-        phone:
-          description: User phone number in international format
-          type: string
-          pattern: '/^\+(?:[0-9]-?){6,14}[0-9]$/'
-          example: +1-202-555-0192
-        userStatus:
-          description: User status
+        applied_discounts:
+          $ref: '#/components/schemas/MarkupDiscount'
+        applied_markups:
+          $ref: '#/components/schemas/MarkupDiscount'
+        booking_id:
           type: integer
-          format: int32
-      xml:
-        name: User
-  requestBodies:
-    Pet:
+        cancelation_policy:
+          $ref: '#/components/schemas/CancelationPolicy'
+        extended_description:
+          type: string
+        extra_data:
+          type: object
+          description: Extra data for the booking item.
+        inventory_id:
+          type: string
+        name:
+          type: string
+        payment_type_status:
+          type: string
+        product_order_number:
+          type: string
+        quantity:
+          type: string
+        status:
+          type: string
+        supplier:
+          type: string
+        supplier_order_number:
+          type: string
+        total:
+          $ref: '#/components/schemas/Money'
+        total_postpaid:
+          $ref: '#/components/schemas/Money'
+        total_supplier:
+          $ref: '#/components/schemas/Money'
+        total_tax:
+          $ref: '#/components/schemas/Money'
+        total_tax_postpaid:
+          $ref: '#/components/schemas/Money'
+    Amount:
+      title: Amount
+      x-stoplight:
+        id: gdnuje3ifvjz0
+      type: object
+      properties:
+        amount:
+          type: string
+          description: Amount to apply formatted as string
+        currency:
+          $ref: '#/components/schemas/Currency'
+      description: Money format for booking discounts and markups
+    AmountBreakdown:
+      title: AmountBreakdown
+      x-stoplight:
+        id: spv3w75d4005z
+      type: object
+      description: Breakdown of markup and discounts
+      properties:
+        amount:
+          $ref: '#/components/schemas/Amount'
+        description:
+          type: string
+        percentage:
+          type: string
+        source:
+          type: string
+    MarkupDiscount:
+      title: MarkupDiscount
+      x-stoplight:
+        id: o8jcs14zroy5u
+      type: object
+      description: Formatted amount for Discounts and Markups. Contains total amount to apply under `amount_to_apply` as well as a breakdown of all the discounts/markups within the `breakdown` array.
+      properties:
+        amount_to_apply:
+          $ref: '#/components/schemas/Amount'
+        breakdown:
+          type: array
+          items:
+            $ref: '#/components/schemas/AmountBreakdown'
+        total_amount_before_apply:
+          $ref: '#/components/schemas/Amount'
+    CancelationPolicyDetails:
+      title: CancelationPolicyDetails
+      x-stoplight:
+        id: s6h8m8yd6rpbq
+      type: object
+      description: Details for cancelation policy. Different dates may apply on different date ranges.
+      properties:
+        from_date:
+          type: string
+          format: date-time
+        to_date:
+          type: string
+          format: date-time
+        penalty_percentage:
+          type: integer
+        penalty_amount:
+          $ref: '#/components/schemas/Money'
+        cancelation_type:
+          type: string
+  responses:
+    200-Hotel:
+      description: '**OK**'
       content:
         application/json:
           schema:
-            allOf:
-              - description: My Pet
-                title: Pettie
-              - $ref: '#/components/schemas/Pet'
+            type: object
+            properties:
+              echo_request:
+                $ref: '#/components/schemas/EchoRequest'
+              status_code:
+                type: integer
+                readOnly: true
+              data:
+                type: object
+                properties:
+                  hotels:
+                    $ref: '#/components/schemas/Hotels'
+              total_quantity:
+                type: integer
+                readOnly: true
+              timestamp:
+                type: string
+                format: date-time
+                readOnly: true
+          examples:
+            Search by dst_geolocation:
+              value:
+                echo_request:
+                  currency: USD
+                  lang: en
+                  correlation_id: 74e5d09d-8181-4d70-9a44-845e7946fcbf
+                  adults: 2
+                  children_ages:
+                    - 10
+                  dst_geolocation:
+                    latitude: 40.73061
+                    longitude: -73.935242
+                  limit: 1
+                  radius: 15
+                  rate_type: SN_PUBLIC
+                  start_date: '2022-12-31'
+                  distance_unit: mi
+                  end_date: '2023-01-02'
+                  rooms: 2
+                  sort: distance
+                  star_rating:
+                    min: 4
+                    max: 4
+                  price:
+                    max: 2000
+                    is_total_price: true
+                  nights: 2
+                status_code: 200
+                data:
+                  hotels:
+                    - id: '704f71db:189672'
+                      giata_code: '422040'
+                      amount_min:
+                        amount: 817.29
+                        formatted: $817.29
+                        currency: USD
+                      details:
+                        address:
+                          coordinates:
+                            latitude: 40.750221
+                            longitude: -73.93689
+                          country_code: US
+                          country: United States
+                          state: NEW YORK
+                          city: LONG ISLAND CITY
+                          zone: Long Island City
+                          district: ''
+                          address1: 29-21 41St Avenue
+                          address2: ''
+                          postal_code: '11103'
+                        chain:
+                          chain_code: HILTO
+                          chain_name: HILTON WORLDWIDE
+                        checkin_time: '14:00:00'
+                        checkout_time: '10:00:00'
+                        description: |-
+                          The following services and amenities are available, but with reduced service: On-site Restaurant(s).The following services and amenities are currently not available: Breakfast, Room Service.Plan a business event at this Hilton Garden Inn Long Island City New York hotel with 1410 sq. ft. of versatile meeting space, comprising four modern meeting rooms, equipped with the latest A/V technology. Make updates to your presentation in the complimentary 24-hour business center, and enjoy complimentary WiFi throughout the hotel. Settle into an inviting guest room offering a refrigerator, microwave, Keurig Coffeemaker, 46-inch LED HDTV and a work desk with ergonomic chair. Choose our Presidential Suite for more space, amenities and private terrace.
+
+                          Maintain your exercise routine with the latest cardio and weights equipment in the complimentary 24-hour fitness center. Start your day with a cooked-to-order breakfast in the Garden Grille & Bar, which also serves American cuisine for lunch and dinner. Dine in the comfort of your guest room with evening room service, and buy snacks, beverages and travel essentials at any time in the 24-hour Pavilion Pantry®. An on-site coin operated laundry is available for your convenience.
+                        email: ISPIC_GM@hilton.com
+                        facilities:
+                          - Minor - AvaniSHIELD
+                          - Rosen - Total Commitment
+                          - Ecuador - Protocolo General para establecimientos de alojamiento turístico
+                          - Morocco - Tourisme au Maroc post Covid-19
+                          - RIU - Covid-19 Health Protocol
+                          - Fitness
+                          - Number of bedrooms
+                          - Sailing
+                          - Table tennis
+                          - Full board
+                          - Morocco - Tourisme au Maroc post Covid-19
+                          - Pedal boating
+                          - Smoking rooms
+                          - Extra beds on demand
+                          - Breakfast a la carte
+                          - Fitness
+                          - Cycling / mountain biking
+                          - 'Blue Diamond Resorts - Enhanced Health, Safety & Cleanliness Protocols'
+                          - Table tennis
+                          - Golf
+                          - Minimum check-in age
+                          - Pedal boating
+                          - Wi-fi
+                          - Banquet hall
+                          - Squash
+                          - Aerobics
+                          - Launderette
+                          - Multilingual staff
+                          - Golf practice facility
+                          - RIU - Covid-19 Health Protocol
+                          - 'Colombia - Check in certificado, COVID-19 bioseguro'
+                          - Minor - AvaniSHIELD
+                          - WTTC - Safe Travels Stamp
+                          - Newspapers
+                          - Luggage room
+                          - Clothes dryer
+                          - Flight information required
+                          - Diving
+                          - Smoking area
+                          - Catamaran sailing
+                          - Banquet hall
+                          - Waterskiing
+                          - Online check-in
+                          - Spa centre
+                          - Business centre
+                          - WaterSlides
+                          - Mauritian Standard on Sustainable Tourism
+                          - Early departure
+                          - Non-smoking establishment
+                          - Fitness
+                          - Bowling alley
+                          - Hilton - CleanStay
+                        name: Hilton Garden Inn Long Island City New York
+                        phones:
+                          - phone_number: '+12126792222'
+                            phone_type: PHONEBOOKING
+                          - phone_number: +1 718-786-6001
+                            phone_type: PHONEHOTEL
+                        star_rating: '4'
+                        type: Hotel
+                        web: ''
+                      photos:
+                        - text: hotel_photo
+                          url: 'https://photos.hotelbeds.com/giata/18/189672/189672a_hb_w_001.jpg'
+                        - text: hotel_photo
+                          url: 'https://photos.hotelbeds.com/giata/18/189672/189672a_hb_a_001.jpg'
+                      relative_position:
+                        distance: 1.3582
+                        distance_unit: mi
+                        near_to:
+                          - location_type: example
+                            location_code: '123'
+                            location_name: Example Location
+                            distance: '0'
+                        distance_to_city_centre: 0
+                        distance_to_nearest_airport: 0
+                      start_date: '2022-12-31'
+                      end_date: '2023-01-02'
+                      thumbnail: 'https://photos.hotelbeds.com/giata/18/189672/189672a_hb_r_001.jpg'
+                      relevance: 46
+                      min_rate_room:
+                        code: DBL.ST-2
+                        name: Bed room
+                        description: DOUBLE STANDARD
+                        room_type: DBL
+                        rates:
+                          min_rate:
+                            sn_booking_code: '20221231|20230102|704f71db:189672|SN_PUBLIC|DBL.ST-2|RO|2|2|1'
+                            booking_code_supplier: 20221231|20230102|W|254|189672|DBL.ST-2|GAR CUSH|RO||2~2~1|10|N@06~~23235a~-2087268341~N~~~NOR~1965183C6DB9442165402074490400AAUS0000051000000000823235a
+                            rate_type: SN_PUBLIC
+                            rate:
+                              rate_breakdown:
+                                discounts:
+                                  amount_to_apply:
+                                    amount: -144.22
+                                    formatted: '-$144.22'
+                                    currency: USD
+                                  breakdown:
+                                    - amount:
+                                        amount: -144.22
+                                        formatted: '-$144.22'
+                                        currency: USD
+                                      description: CES Show new
+                                      percentage: 0.15
+                                      source: SIMPLENIGHT
+                                  total_amount_before_apply:
+                                    amount: 961.52
+                                    formatted: $961.52
+                                    currency: USD
+                                  percentage_to_apply: 15%
+                                markups:
+                                  amount_to_apply:
+                                    amount: 103.02
+                                    formatted: $103.02
+                                    currency: USD
+                                  breakdown:
+                                    - amount:
+                                        amount: 103.02
+                                        formatted: $103.02
+                                        currency: USD
+                                      description: Simplenight Markup
+                                      percentage: 0.12
+                                      source: SIMPLENIGHT
+                                  total_amount_before_apply:
+                                    amount: 858.5
+                                    formatted: $858.50
+                                    currency: USD
+                                  percentage_to_apply: 12%
+                                total_taxes:
+                                  amount: 122.55
+                                  formatted: $122.55
+                                  currency: USD
+                                total_base_amount:
+                                  amount: 735.95
+                                  formatted: $735.95
+                                  currency: USD
+                                taxes:
+                                  - included_in_total: true
+                                    description: TAXESANDFEES
+                                    tax_amount:
+                                      amount: 122.55
+                                      formatted: $122.55
+                                      currency: USD
+                              total_amount:
+                                amount: 817.29
+                                formatted: $817.29
+                                currency: USD
+                              diff_min_rate:
+                                amount: 0
+                                formatted: $0
+                                currency: USD
+                            cancellation_policy:
+                              description: 'Free cancellation until 2022-12-28. From 2022-12-29, there is a cancellation fee of $531.24'
+                              details:
+                                - from_date: '2022-05-31T00:00:00Z'
+                                  to_date: '2022-12-28T23:59:59Z'
+                                  penalty_percentage: 0
+                                  penalty_amount:
+                                    amount: 0
+                                    formatted: $0
+                                    currency: USD
+                                  cancellation_type: FREE_CANCELLATION
+                                - from_date: '2022-12-29T00:00:00Z'
+                                  to_date: '2022-12-31T23:59:59Z'
+                                  penalty_percentage: 65
+                                  penalty_amount:
+                                    amount: 531.24
+                                    formatted: $531.24
+                                    currency: USD
+                                  cancellation_type: PARTIAL_REFUND
+                              cancellation_type: FREE_CANCELLATION
+                            comments: ''
+                            meal_plan:
+                              code: RO
+                              text: ROOM ONLY
+                            available_qty: 2
+                            requires_validation_before_booking: false
+                          avg_amount:
+                            amount: 429.25
+                            formatted: $429.25
+                            currency: USD
+                            debug_info:
+                              - 'Avg formula: total_amount ($858.50) / nights (2)'
+                          upgrades: []
+                        amenities: []
+                        capacity:
+                          min_pax: 1
+                          max_pax: 5
+                          min_adults: 1
+                          max_adults: 4
+                          min_children: 4
+                          max_children: 4
+                        photos:
+                          - text: room photo
+                            url: 'https://photos.hotelbeds.com/giata/18/189672/189672a_hb_ro_003.jpg'
+                          - text: room photo
+                            url: 'https://photos.hotelbeds.com/giata/18/189672/189672a_hb_ro_009.jpg'
+                          - text: room photo
+                            url: 'https://photos.hotelbeds.com/giata/18/189672/189672a_hb_ro_091.jpg'
+                          - text: room photo
+                            url: 'https://photos.hotelbeds.com/giata/18/189672/189672a_hb_ro_094.jpg'
+                        services:
+                          double_beds: 0
+                          free_breakfast: false
+                          free_parking: false
+                          free_wifi: false
+                          king_beds: 0
+                          other_beds: 1
+                          queen_beds: 0
+                          total_bathrooms: 1
+                          total_beds: 1
+                          total_rooms: 1
+                total_qty: 1
+                timestamp: '2022-05-31 18:12:25.748237'
         application/xml:
           schema:
-            type: 'object'
+            type: object
             properties:
-              name:
+              '':
                 type: string
-                description: hooray
-      description: Pet object that needs to be added to the store
-      required: true
-    UserArray:
+        multipart/form-data:
+          schema:
+            type: object
+            properties: {}
+    400-Hotel:
+      description: |-
+        **Bad Request**
+         - Both `dst_geolocation` and `inventory_ids` were provided
+         - Neither `dst_geolocation` nor `inventory_ids` was provided
+         - Number of `children` and length of `children_ages` are different
+         - The provided `end_date` is before the `start_date`
+         - `Start_date` is before today
+         - Only one of `start_date` or `end_date` were provided.
+         - `latitude` and/or `longitude` values are out of bounds
+         - `rate_type` `currency` `lang` `sort` `unit` do not match the possible values
+         - `radius` is more than `50` or less than `1`
+         - `0` `adults` with at least `1` children
+         - `adults`, `children` or `rooms` exceed the maximum of `10`
+         - `adults` or `rooms` are `0`
+
       content:
         application/json:
           schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/User'
-      description: List of user object
-      required: true
-  securitySchemes:
-    petstore_auth:
-      description: |
-        Get access to data while protecting your account credentials.
-        OAuth2 is also a safer and more secure way to give you access.
-      type: oauth2
-      flows:
-        implicit:
-          authorizationUrl: 'http://petstore.swagger.io/api/oauth/dialog'
-          scopes:
-            'write:pets': modify pets in your account
-            'read:pets': read your pets
-    api_key:
-      description: >
-        For this sample, you can use the api key `special-key` to test the
-        authorization filters.
-      type: apiKey
-      name: api_key
-      in: header
-  examples:
-    Order:
-      value:
-        quantity: 1
-        shipDate: '2018-10-19T16:46:45Z'
-        status: placed
-        complete: false
-x-webhooks:
-  newPet:
-    post:
-      summary: New pet
-      description: Information about a new pet in the systems
-      operationId: newPet
-      tags:
-        - pet
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Pet'
-      responses:
-        '200':
-          description: Return a 200 status to indicate that the data was received successfully
+            $ref: ./Error.v1.yaml
+          examples: {}
+        application/xml:
+          schema:
+            $ref: ./Error.v1.yaml
+    200-Cart:
+      description: '**OK**'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              echo_request:
+                type: object
+              status_code:
+                type: integer
+              data:
+                type: object
+                properties:
+                  cart:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Cart'
+              timestamp:
+                $ref: '#/components/schemas/DateTime'
+    200-DeleteCart:
+      description: |-
+        **OK**
+
+        Cart deleted successfully.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              echo_request:
+                type: object
+              status:
+                type: integer
+              data:
+                type: object
+              timestamp:
+                $ref: '#/components/schemas/DateTime'
+    404-Cart:
+      description: |-
+        The cart does not exist.
+        * The `cart_id` does not match any existing carts.
+        * The `cart_id` belongs to a deleted cart.
+      content:
+        application/json:
+          schema:
+            properties:
+              id:
+                type: string
+        application/xml:
+          schema:
+            $ref: ./Error.v1.yaml
+    200-CartItem:
+      description: '**OK**'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              echo_request:
+                type: object
+              status:
+                type: integer
+              data:
+                type: object
+                properties:
+                  item:
+                    $ref: '#/components/schemas/CartItem'
+              timestamp:
+                $ref: '#/components/schemas/DateTime'
+    200-Booking:
+      description: '**OK**'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              echo_request:
+                type: object
+                description: Envelop containing the data sent in the request
+              status_code:
+                type: integer
+              data:
+                type: object
+                properties:
+                  booking:
+                    $ref: '#/components/schemas/Booking'
+              timestamp:
+                type: string
+                format: date-time
+  requestBodies:
+    Cart:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              lang:
+                $ref: '#/components/schemas/Language'
+              currency:
+                $ref: '#/components/schemas/Currency'
+              items:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Item'
+              sandbox_mode:
+                type: boolean
+              customer:
+                $ref: '#/components/schemas/Customer'
+              organization_url:
+                type: string
+              customer_additional_request:
+                type: string
+    Booking:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              cart_id:
+                type: string
+              payment_request:
+                $ref: '#/components/schemas/PaymentRequest'
+            required:
+              - cart_id
+              - payment_request
+      description: Required parameters to make a `POST` request to the `/bookings/` endpoint.
+servers: []
+security:
+  - SIMPLENIGHT-API-KEY: []
