@@ -2,7 +2,7 @@ openapi: 3.0.3
 x-stoplight:
   id: 7wz2iwhrv7f95
 info:
-  contact: null
+  contact: support@simplenight.com
   title: Simplenight API V2
   version: 1.0.0
   description: Simplenight API Search Hotels
@@ -2363,11 +2363,9 @@ components:
       content:
         application/json:
           schema:
-            $ref: ./Error.v1.yaml
           examples: {}
         application/xml:
           schema:
-            $ref: ./Error.v1.yaml
     200-Cart:
       description: '**OK**'
       content:
@@ -2419,7 +2417,6 @@ components:
                 type: string
         application/xml:
           schema:
-            $ref: ./Error.v1.yaml
     200-CartItem:
       description: '**OK**'
       content:
