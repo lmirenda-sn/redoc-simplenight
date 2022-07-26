@@ -2,7 +2,10 @@ openapi: 3.0.3
 x-stoplight:
   id: 7wz2iwhrv7f95
 info:
-  contact: support@simplenight.com
+  contact:
+    name: Simplenight
+    url: simplenight.com
+    email: support@simplenight.com
   title: Simplenight API V2
   version: 1.0.0
   description: Simplenight API Search Hotels
@@ -2362,7 +2365,6 @@ components:
 
       content:
         application/json:
-          schema:
           examples: {}
         application/xml:
           schema:
