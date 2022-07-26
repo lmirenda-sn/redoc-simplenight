@@ -2367,7 +2367,6 @@ components:
         application/json:
           examples: {}
         application/xml:
-          schema:
     200-Cart:
       description: '**OK**'
       content:
