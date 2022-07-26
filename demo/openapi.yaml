@@ -2366,7 +2366,6 @@ components:
       content:
         application/json:
           examples: {}
-        application/xml:
     200-Cart:
       description: '**OK**'
       content:
@@ -2416,8 +2415,6 @@ components:
             properties:
               id:
                 type: string
-        application/xml:
-          schema:
     200-CartItem:
       description: '**OK**'
       content:
